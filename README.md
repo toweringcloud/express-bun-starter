@@ -17,7 +17,7 @@ $ bun -v
 
 ### configure
 
--   run nodejs app with nodemon environment
+-   run bun app with nodemon environment
 
 ```sh
 $ bun init -y
@@ -27,7 +27,7 @@ $ bun add -D @types/node @types/express
 
 ### launch
 
--   run nodejs app with nodemon environment
+-   run bun app with nodemon environment
 
 ```sh
 $ bun dev

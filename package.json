@@ -2,7 +2,7 @@
   "name": "bun-express-starter",
   "main": "server.ts",
   "scripts": {
-    "dev": "bun --watch server.ts"
+    "start": "bun --watch server.ts"
   },
   "private": true,
   "dependencies": {
