@@ -6,6 +6,10 @@ import userRouter from "./routers/userRouter";
 
 const app = express();
 
+// Templating Engine
+app.set("view engine", "pug");
+app.set("views", process.cwd() + "/src/views");
+
 // Custom Middlewares
 const logger = morgan("dev");
 app.use(logger);

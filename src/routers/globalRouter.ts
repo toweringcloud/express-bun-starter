@@ -1,9 +1,9 @@
 import express from "express";
 import { signUp, signIn, signOut } from '../controllers/userController';
-import { trending, newStory } from '../controllers/storyController';
+import { home, trending, newStory } from '../controllers/storyController';
 
 const globalRouter = express.Router();
-globalRouter.get('/', trending);
+globalRouter.get('/', home);
 globalRouter.get('/trending', trending);
 globalRouter.get('/new', newStory);
 globalRouter.get('/join', signUp);
