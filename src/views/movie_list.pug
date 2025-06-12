@@ -1,0 +1,13 @@
+extends templates/layout
+include mixins/movie
+
+block content
+  h1=pageTitle
+  form(action="/movies/filter", method="get")
+    input(type="text" name="year" placeholder="Filter by year")
+    input(type="number" name="rating" placeholder="Filter by rating")
+    button Search 
+  each item in movies
+    +movie(item)
+  else
+    li Sorry, No Movies

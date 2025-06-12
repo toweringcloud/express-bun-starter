@@ -1,0 +1,15 @@
+extends templates/layout
+
+block content
+  center
+    h2=pageTitle
+    img(src=`${movie.medium_cover_image}`)
+    h3 😎 released at #{movie.year}
+    h3 😎 rating : #{movie.rating} of 10
+    if movie.genres
+      h3 😎 genres of movie
+      each genre in movie.genres
+        li #{genre}
+    hr
+    h4
+      a(href="/movies") Go to Home
