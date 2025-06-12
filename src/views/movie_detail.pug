@@ -1,15 +1,14 @@
 extends templates/layout
 
 block content
-  center
-    h2=pageTitle
+  h2=movie.title
+  if movie.medium_cover_image
     img(src=`${movie.medium_cover_image}`)
-    h3 😎 released at #{movie.year}
-    h3 😎 rating : #{movie.rating} of 10
-    if movie.genres
-      h3 😎 genres of movie
+  p=movie.synopsis
+  h3 😎 released at #{movie.year || new Date().getFullYear()}
+  h3 😎 rating : #{movie.rating || 0} of 10
+  if movie.genres
+    h3 😎 genres of movie
+    ul
       each genre in movie.genres
         li #{genre}
-    hr
-    h4
-      a(href="/movies") Go to Home

@@ -49,3 +49,20 @@ export const getMovieByMinimumRating = (rating: number) => {
   }
   return movies.filter((m: any) => m.rating >= rating);
 };
+
+export type TMovie = {
+  id?: number;
+  title: string;
+  synopsis: string;
+  genres: string[];
+};
+export const addMovie = ({ title, synopsis, genres }: TMovie) => {
+  if (typeof title !== 'string' || typeof synopsis !== 'string') {
+    throw Error('❌  title and synopsis should be strings  ❌');
+  }
+  if (!(genres instanceof Array)) {
+    throw Error('❌  genres should be an array  ❌');
+  }
+  const id = Math.floor(Math.random() * (title.length + Date.now()));
+  movies = [{ id, title, synopsis, genres }, ...movies];
+};
