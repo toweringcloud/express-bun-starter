@@ -1,4 +1,4 @@
 mixin movie(item = {})
   div
     li
-      a(href=`/movies/${item.id}`)=`${item.title} (${item.year || new Date().getFullYear()})`
+      a(href=`/movies/${item.id}`)=`${item.title} (${item.year})`

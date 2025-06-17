@@ -1,0 +1,25 @@
+extends templates/layout
+
+block content
+  h2=`${movie.title} (${movie.year || new Date().getFullYear()})`
+  if movie.posterImage
+    br
+    .flex-container
+      .item1
+        img(src=`${movie.posterImage}` width='90%' alt=`${movie.title} Poster`)
+      .item2
+        p=movie.summary
+        each genre in movie.genres
+          li #{genre}
+        p=`✨ ${movie.rating}`
+  else
+    p=movie.summary
+    each genre in movie.genres
+      li #{genre}
+    p=`✨ ${movie.rating}`
+  br
+  span 😎
+    a(href=`/movies/${movie.id}/edit`, role="button") Edit Movie
+  br
+  span 😨
+    a(href=`/movies/${movie.id}/delete`, role="button") Delete Movie

@@ -1,7 +1,0 @@
-extends templates/layout
-
-block content
-  h2=pageTitle
-  form(action="/movies/edit" method="POST")
-    input(type="text" name="title" placeholder="영화 제목" required)
-    input(type="submit" value="SAVE")

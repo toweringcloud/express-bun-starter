@@ -1,0 +1,17 @@
+.flex-container {
+  display: flex; /* Flexbox 컨테이너로 지정 */
+  gap: 0px; /* 아이템 사이의 간격 (선택 사항) */
+}
+
+.flex-container > .item1 {
+  flex: 1; /* 모든 아이템이 동일한 너비를 갖도록 설정 */
+  text-align: center;
+}
+
+.flex-container > .item2 {
+  flex: 1; /* 모든 아이템이 동일한 너비를 갖도록 설정 */
+  /* border: 1px solid #ccc; */
+  padding-right: 10px;
+  padding-left: 20px;
+  text-align: left;
+}

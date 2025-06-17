@@ -1,9 +1,0 @@
-extends templates/layout
-
-block content
-  h2=pageTitle
-  form(action="/movies/add" method="POST")
-    input(type="text" name="title" placeholder="영화 제목" required)
-    input(type="text" name="synopsis" placeholder="영화 줄거리" required)
-    input(type="text" name="genres" placeholder="영화 장르 (,로 구분)" required)
-    input(type="submit" value="SAVE")

@@ -1,9 +1,10 @@
-extends layout.pug
+extends templates/layout
+include mixins/movie
 
 block content
-    main
-        h2 Home Page Content
-        p This is the home page of your Express Node App.
-        p You can customize this page to suit your needs.
-        li
-            a(href="/movies") Go to Movies List
+  h2=pageTitle
+  p.info Please check movie list that you added.
+  each item in movies
+    +movie(item)
+  else
+    li Sorry, No Movies

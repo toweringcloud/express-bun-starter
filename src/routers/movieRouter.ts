@@ -1,12 +1,27 @@
-import express from 'express';
-import { home, detail, filter } from '../controllers/movieController';
-import { getAdd, postAdd, getEdit, postEdit } from '../controllers/movieController';
+import express from "express";
+
+import {
+  listMovie,
+  searchMovie,
+  watchMovie,
+  addMovie,
+  createMovie,
+  editMovie,
+  updateMovie,
+  deleteMovie,
+} from "../controllers/movieController";
 
 const movieRouter = express.Router();
-movieRouter.get('/', home);
-movieRouter.get('/filter', filter);
-movieRouter.get('/:id(\\d+)', detail);
-movieRouter.route('/add').get(getAdd).post(postAdd);
-movieRouter.route('/edit').get(getEdit).post(postEdit);
+// queries
+movieRouter.get("/", listMovie);
+movieRouter.get("/search", searchMovie);
+movieRouter.get("/movies/:id([0-9a-f]{24})", watchMovie);
+// mutations
+movieRouter.route("/upload").get(addMovie).post(createMovie);
+movieRouter
+  .route("/movies/:id([0-9a-f]{24})/edit")
+  .get(editMovie)
+  .post(updateMovie);
+movieRouter.route("/movies/:id([0-9a-f]{24})/delete").get(deleteMovie);
 
 export default movieRouter;

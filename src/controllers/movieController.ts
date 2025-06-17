@@ -1,63 +1,124 @@
-import {
-  addMovie,
-  getMovieById,
-  getMovies,
-  getMovieByMinimumRating,
-  getMovieByMinimumYear,
-  type TMovie,
-} from '../db';
+import Movie, { formatGenres, formatYear } from "../models/Movie.js";
 
-// queries
-export const home = (req: any, res: { render: (arg0: string, {}) => any; }) => {
-  const movies = getMovies();
-  return res.render('movie_list', { pageTitle: 'Movies!', movies });
-};
-export const detail = (req: { params: { id: any; }}, res: { render: (arg0: string, {}) => any; }) => {
-  const movie = getMovieById(req.params.id);
-  return res.render('movie_detail', { pageTitle: movie.title, movie });
-};
-export const filter = (req: any, res: { render: (arg0: string, {}) => any; }) => {
-  const year = req.query.year;
-  if (year) {
-    const movies = getMovieByMinimumYear(year);
-    return res.render('movie_list', {
-      pageTitle: `Filter by year: ${year}`,
-      movies,
-    });
-  }
-  const rating = req.query.rating;
-  if (rating) {
-    const movies = getMovieByMinimumRating(rating);
-    return res.render('movie_list', {
-      pageTitle: `Filter by rating: ${rating}`,
-      movies,
-    });
-  }
+// queries (read-list/search/watch)
+export const listMovie = async (
+  req: any,
+  res: { render: (arg0: string, {}) => any }
+) => {
+  const movies = await Movie.find({}).sort({ createdAt: -1 });
+  return res.render("home", { pageTitle: "Home", movies });
 };
 
-// mutations
-export const getAdd = (req: any, res: { render: (arg0: string, {}) => any; }) => {
-  return res.render('movie_add', { pageTitle: 'Add Movie' });
+export const searchMovie = async (
+  req: any,
+  res: { render: (arg0: string, {}) => any }
+) => {
+  const { keyword } = req.query;
+  let movies: any = [];
+  if (keyword) {
+    movies = await Movie.find({
+      title: {
+        $regex: new RegExp(keyword, "i"),
+      },
+    });
+    console.log(keyword, movies);
+  }
+  return res.render("search", { pageTitle: "Search", keyword, movies });
 };
-export const postAdd = (req: any, res: { redirect: (arg0: string) => any; }) => {
-  const { title, synopsis, genres } = req.body;
-  addMovie({ title, synopsis, genres: genres.split(',') });
-  return res.redirect('/');
-};
-export const getEdit = (req: any, res: { render: (arg0: string, {}) => any; }) => {
-  return res.render('movie_edit', { pageTitle: 'Edit Movie' });
-};
-export const postEdit = (req: any, res: { status: (code: number) => any; redirect: (arg0: string) => any; }) => {
+
+export const watchMovie = async (
+  req: any,
+  res: { render: (arg0: string, {}) => any }
+) => {
   const { id } = req.params;
-  if (!getMovieById(id)) {
-    return res.status(404).send('Movie not found');
+  const movie = await Movie.findById(id);
+  if (!movie) {
+    return res.render("404", { pageTitle: "Movie not found." });
   }
-  const { title } = req.body;
-  getMovies().map((movie: TMovie) => {
-    if (movie.id === parseInt(id, 10)) {
-      return { ...movie, title };
+  return res.render("detail", { pageTitle: movie.title, movie });
+};
+
+// mutations (create, update, delete)
+export const addMovie = (
+  req: any,
+  res: { render: (arg0: string, {}) => any }
+) => {
+  return res.render("upload", { pageTitle: "Upload Movie" });
+};
+export const createMovie = async (
+  req: any,
+  res: {
+    render: (arg0: string, {}) => any;
+    redirect: (arg0: string) => any;
+  }
+) => {
+  const { title, summary, year, genres, posterImage } = req.body;
+  try {
+    if (!title || !summary) {
+      throw new Error("Mandatory fields are required.");
     }
-    return movie;
+    await Movie.create({
+      title,
+      summary,
+      year: formatYear(year),
+      genres: formatGenres(genres),
+      posterImage,
+    });
+    return res.redirect("/");
+  } catch (error: any) {
+    console.error("Error adding movie:", error);
+    return res.render("upload", {
+      pageTitle: "Add Movie",
+      errorMessage: error._message,
+    });
+  }
+};
+
+export const editMovie = async (
+  req: any,
+  res: {
+    render: (arg0: string, {}) => any;
+  }
+) => {
+  const { id } = req.params;
+  const movie = await Movie.findById(id);
+  if (!movie) {
+    return res.render("404", { pageTitle: "Movie not found." });
+  }
+  return res.render("edit", { pageTitle: `Edit: ${movie.title}`, movie });
+};
+export const updateMovie = async (
+  req: any,
+  res: {
+    render: (arg0: string, {}) => any;
+    redirect: (arg0: string) => any;
+  }
+) => {
+  const { id } = req.params;
+  const movie = await Movie.exists({ _id: id });
+  if (!movie) {
+    return res.render("404", { pageTitle: "Movie not found." });
+  }
+  const { title, summary, year, rating, genres, posterImage } = req.body;
+  await Movie.findByIdAndUpdate(id, {
+    title,
+    summary,
+    year: formatYear(year),
+    rating: rating ? parseFloat(rating) : 0,
+    genres: formatGenres(genres),
+    posterImage,
+    updatedAt: Date.now(),
   });
-  return res.redirect('/movies');
+  return res.redirect("/");
+};
+
+export const deleteMovie = async (
+  req: any,
+  res: {
+    redirect: (arg0: string) => any;
+  }
+) => {
+  const { id } = req.params;
+  await Movie.findByIdAndDelete(id);
+  return res.redirect("/");
 };
