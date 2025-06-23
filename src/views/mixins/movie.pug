@@ -1,4 +1,5 @@
 mixin movie(item = {})
   div
     li
-      a(href=`/movies/${item.id}`)=`${item.title} (${item.year})`
+      a(href=`/movies/${item.id}`)=`${item.title} (${item.year})` 
+      small #{" : " + item.summary.substring(0, 50) + " ..."}

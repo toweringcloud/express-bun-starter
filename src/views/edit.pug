@@ -2,8 +2,8 @@ extends templates/layout
 
 block content
   h2=pageTitle
-  p.info Please fill the form to update a movie information.
-  form(action=`/movies/${movie.id}/edit` method="POST")
+  p.info Please fill the form to update a movie.
+  form(method="POST")
     input(type="text" name="title" placeholder="Title" required maxlength=50 value=movie.title)
     input(type="text" name="summary" placeholder="Summary" required minlength=20 value=movie.summary)
     input(type="text" name="year" placeholder="Release Year" value=movie.year)
@@ -11,3 +11,5 @@ block content
     input(type="text" name="genres" placeholder="Genres (by comma)" value=movie.genres.join(', '))
     input(type="text" name="posterImage" placeholder="Poster Image Path" value=movie.posterImage)
     input(type="submit" value="SAVE")
+  if errorMessage
+    p.warning=errorMessage

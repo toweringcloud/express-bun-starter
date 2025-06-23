@@ -5,5 +5,17 @@ span &nbsp;
 span
   a(href="/search") Search
 span &nbsp;
-span
-  a(href="/upload") Upload Movie
+if loggedIn
+  span
+    a(href="/movies/upload") Upload
+  span &nbsp;
+  span
+    a(href="/logout") Logout
+  span
+    small=` (${loggedInUser.username})`
+else
+  span
+    a(href="/join") Join
+  span &nbsp;
+  span
+    a(href="/login") Login

@@ -12,14 +12,10 @@ block content
         each genre in movie.genres
           li #{genre}
         p=`✨ ${movie.rating}`
+        include ./partials/mutation
   else
     p=movie.summary
     each genre in movie.genres
       li #{genre}
     p=`✨ ${movie.rating}`
-  br
-  span 😎
-    a(href=`/movies/${movie.id}/edit`, role="button") Edit Movie
-  br
-  span 😨
-    a(href=`/movies/${movie.id}/delete`, role="button") Delete Movie
+    include ./partials/mutation

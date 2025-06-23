@@ -3,10 +3,11 @@ include mixins/movie
 
 block content
   h2=pageTitle
-  p.info Please fill the keyword to search by title.
-  form(action="/search" method="GET")
+  p.info Please input the keyword to search by title.
+  form(method="GET")
     input(type="text" name="keyword" placeholder="Search by title" minlnegth=2 required value=keyword)
     input(type="submit" value="SEARCH")
+  br
   div
     each item in movies
       +movie(item)
