@@ -1,42 +1,15 @@
 import mongoose from "mongoose";
 
-const MovieSchema = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true,
-    trim: true,
-    maxLength: 50,
-  },
-  summary: {
-    type: String,
-    required: true,
-    trim: true,
-    minLength: 20,
-  },
-  year: {
-    type: Number,
-    default: new Date().getFullYear(),
-  },
-  rating: {
-    type: Number,
-    default: 0,
-  },
+const movieSchema = new mongoose.Schema({
+  title: { type: String, required: true, trim: true, maxLength: 50 },
+  summary: { type: String, required: true, trim: true, minLength: 20 },
+  year: { type: Number, default: new Date().getFullYear() },
+  rating: { type: Number, default: 0 },
   genres: [{ type: String }],
-  posterImage: {
-    type: String,
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now,
-  },
-  isActive: {
-    type: Boolean,
-    default: true,
-  },
+  posterImage: { type: String },
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now },
+  isActive: { type: Boolean, default: true },
 });
 
 export const formatYear = (year: string): number => {
@@ -48,5 +21,5 @@ export const formatGenres = (genres: string): string[] => {
   return !parsed ? [] : parsed;
 };
 
-const Movie = mongoose.model("Movie", MovieSchema);
+const Movie = mongoose.model("Movie", movieSchema);
 export default Movie;

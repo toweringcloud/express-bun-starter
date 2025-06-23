@@ -60,7 +60,7 @@ export const postLogin = async (
       errorMessage: "An account with this username does not exists.",
     });
   }
-  const ok = await bcrypt.compare(password, user.password);
+  const ok = await bcrypt.compare(password, user.password!);
   if (!ok) {
     return res.status(400).render("login", {
       pageTitle,

@@ -1,11 +1,12 @@
 # bun-express-starter
+
 bun based express web app using mongodb and pug
 
 ## how to run
 
 ### setup
 
--   install latest bun runtime
+- install latest bun runtime
 
 ```sh
 $ curl -fsSL https://bun.sh/install | bash
@@ -17,17 +18,24 @@ $ bun -v
 
 ### configure
 
--   run bun app with nodemon environment
+- run bun app with nodemon environment
 
 ```sh
 $ bun init -y
-$ bun add express
-$ bun add -D @types/node @types/express
+$ bun install
+$ vi .env
+API_PORT_NO=5000
+COOKIE_SECRET={YOUR_COOKIE_SECRET}
+DB_URL=mongodb://127.0.0.1:27017/movie
+GH_API_URL=https://api.github.com
+GH_AUTH_URL=https://github.com/login/oauth
+GH_CLIENT_ID={YOUR_GITHUB_CLIENT_ID}
+GH_CLIENT_SECRET={YOUR_GITHUB_CLIENT_SECRET}
 ```
 
 ### launch
 
--   run bun app with nodemon environment
+- run bun app with nodemon environment
 
 ```sh
 $ bun dev
