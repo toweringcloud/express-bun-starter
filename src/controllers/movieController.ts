@@ -18,7 +18,7 @@ export const searchMovie = async (req: Request, res: Response) => {
     });
     console.log(keyword, movies);
   }
-  return res.render("search", { pageTitle: "Search", keyword, movies });
+  return res.render("search", { pageTitle: "Movie Search", keyword, movies });
 };
 
 export const watchMovie = async (req: Request, res: Response) => {
@@ -32,7 +32,7 @@ export const watchMovie = async (req: Request, res: Response) => {
 
 // mutations (create, update, delete)
 export const addMovie = (req: Request, res: Response) => {
-  return res.render("upload", { pageTitle: "Upload Movie" });
+  return res.render("upload", { pageTitle: "Movie Upload" });
 };
 export const createMovie = async (req: Request, res: Response) => {
   const { title, summary, year, genres, posterImage } = req.body;
