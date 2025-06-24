@@ -8,13 +8,14 @@ import {
   postLogin,
   logout,
 } from "../controllers/userController";
+import { protector, publicOnly } from "../middlewares";
 
 const rootRouter = express.Router();
 
 rootRouter.get("/", listMovie);
 rootRouter.get("/search", searchMovie);
-rootRouter.route("/join").get(getJoin).post(postJoin);
-rootRouter.route("/login").get(getLogin).post(postLogin);
-rootRouter.route("/logout").get(logout);
+rootRouter.route("/join").all(publicOnly).get(getJoin).post(postJoin);
+rootRouter.route("/login").all(publicOnly).get(getLogin).post(postLogin);
+rootRouter.get("/logout", protector, logout);
 
 export default rootRouter;

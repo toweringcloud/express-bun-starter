@@ -1,10 +1,8 @@
+import type { Request, Response } from "express";
 import axios from "axios";
 import User from "../models/User";
 
-export const githubLogin = (
-  req: any,
-  res: { redirect: (arg0: string) => any }
-) => {
+export const githubLogin = (req: Request, res: Response) => {
   const baseUrl = `${process.env.GH_AUTH_URL}/authorize`;
   const config: Record<string, string> = {
     client_id: process.env.GH_CLIENT_ID!,
@@ -16,15 +14,12 @@ export const githubLogin = (
   return res.redirect(finalUrl);
 };
 
-export const githubCallback = async (
-  req: any,
-  res: { redirect: (arg0: string) => any }
-) => {
+export const githubCallback = async (req: Request, res: Response) => {
   const baseUrl = `${process.env.GH_AUTH_URL}/access_token`;
   const configObj: Record<string, string> = {
     client_id: process.env.GH_CLIENT_ID!,
     client_secret: process.env.GH_CLIENT_SECRET!,
-    code: req.query.code,
+    code: req.query.code!,
   };
   const loginParams = new URLSearchParams(configObj).toString();
   const tokenRes = await (
@@ -32,7 +27,6 @@ export const githubCallback = async (
       headers: { Accept: "application/json" },
     })
   ).data;
-  // console.log(tokenRes);
 
   const tokenFirst = tokenRes.split("&")[0].split("=");
   if ("access_token" == tokenFirst[0]) {
@@ -44,7 +38,6 @@ export const githubCallback = async (
         headers: { Authorization: `token ${access_token}` },
       })
     ).data;
-    // console.log(userData);
 
     const emailData = await (
       await axios.get(`${baseUrl}/emails`, {
@@ -52,9 +45,9 @@ export const githubCallback = async (
       })
     ).data;
     const emailObj = emailData.find(
-      (email: any) => email.primary === true && email.verified === true
+      (email: { primary: boolean; verified: boolean }) =>
+        email.primary === true && email.verified === true
     );
-    // console.log(emailObj);
 
     if (!emailObj) {
       return res.redirect("/login");

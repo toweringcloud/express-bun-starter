@@ -1,6 +1,28 @@
-export const localsMiddleware = (req: any, res: any, next: any) => {
+import type { Request, Response, NextFunction } from "express";
+
+export const localsMiddleware = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   res.locals.siteTitle = "Nomad Movies";
   res.locals.loggedIn = Boolean(req.session.loggedIn);
   res.locals.loggedInUser = req.session.user;
   next();
+};
+
+export const protector = (req: Request, res: Response, next: NextFunction) => {
+  if (req.session.loggedIn) {
+    return next();
+  } else {
+    return res.redirect("/login");
+  }
+};
+
+export const publicOnly = (req: Request, res: Response, next: NextFunction) => {
+  if (!req.session.loggedIn) {
+    return next();
+  } else {
+    return res.redirect("/");
+  }
 };
