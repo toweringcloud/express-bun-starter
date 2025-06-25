@@ -18,7 +18,7 @@ export const searchMovie = async (req: Request, res: Response) => {
     });
     console.log(keyword, movies);
   }
-  return res.render("search", { pageTitle: "Movie Search", keyword, movies });
+  return res.render("search", { pageTitle: "Search Movie", keyword, movies });
 };
 
 export const watchMovie = async (req: Request, res: Response) => {
@@ -32,10 +32,15 @@ export const watchMovie = async (req: Request, res: Response) => {
 
 // mutations (create, update, delete)
 export const addMovie = (req: Request, res: Response) => {
-  return res.render("upload", { pageTitle: "Movie Upload" });
+  return res.render("upload", { pageTitle: "Upload Movie" });
 };
 export const createMovie = async (req: Request, res: Response) => {
-  const { title, summary, year, genres, posterImage } = req.body;
+  const {
+    body: { title, summary, year, genres, posterImage },
+    file,
+  } = req;
+  console.log(`# addMovie: ${JSON.stringify(file)}`);
+
   try {
     if (!title || !summary) {
       throw new Error("Mandatory fields are required.");
@@ -46,6 +51,7 @@ export const createMovie = async (req: Request, res: Response) => {
       year: formatYear(year),
       genres: formatGenres(genres),
       posterImage,
+      fileUrl: file ? file.path : undefined,
     });
     return res.redirect("/");
   } catch (error: unknown) {
@@ -85,7 +91,12 @@ export const updateMovie = async (req: Request, res: Response) => {
   if (!movie) {
     return res.render("404", { pageTitle: "Movie not found." });
   }
-  const { title, summary, year, rating, genres, posterImage } = req.body;
+  const {
+    body: { title, summary, year, rating, genres, posterImage },
+    file,
+  } = req;
+  // console.log(`# updateMovie: ${file}`);
+
   await Movie.findByIdAndUpdate(id, {
     title,
     summary,
@@ -93,6 +104,7 @@ export const updateMovie = async (req: Request, res: Response) => {
     rating: rating ? parseFloat(rating) : 0,
     genres: formatGenres(genres),
     posterImage,
+    fileUrl: file ? file.path : undefined,
     updatedAt: Date.now(),
   });
   return res.redirect("/");

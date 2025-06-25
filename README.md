@@ -40,3 +40,9 @@ GH_CLIENT_SECRET={YOUR_GITHUB_CLIENT_SECRET}
 ```sh
 $ bun dev
 ```
+
+### test
+
+- download sample media file
+  - [Pexcel](https://www.pexels.com)
+  - [Others](https://www.sample-videos.com)

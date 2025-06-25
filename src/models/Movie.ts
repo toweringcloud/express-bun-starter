@@ -7,6 +7,7 @@ const movieSchema = new mongoose.Schema({
   rating: { type: Number, default: 0 },
   genres: [{ type: String }],
   posterImage: { type: String },
+  fileUrl: { type: String },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
   isActive: { type: Boolean, default: true },

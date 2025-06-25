@@ -9,13 +9,21 @@ block content
         img(src=`${movie.posterImage}` width='90%' alt=`${movie.title} Poster`)
       .item2
         p=movie.summary
-        each genre in movie.genres
-          li #{genre}
-        p=`✨ ${movie.rating}`
+        if movie.fileUrl
+          small=`${movie.genres.join(", ")} (✨ ${movie.rating})`
+          video(src=`/${movie.fileUrl.replace("files", "uploads")}` width='98%' controls)
+          br
+          br
+        else
+          each genre in movie.genres
+            li #{genre}
+          p=`✨ ${movie.rating}`
+          hr
         include ./partials/mutation
   else
     p=movie.summary
     each genre in movie.genres
       li #{genre}
     p=`✨ ${movie.rating}`
+    hr
     include ./partials/mutation

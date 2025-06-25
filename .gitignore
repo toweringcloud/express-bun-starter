@@ -33,5 +33,8 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 # Finder (MacOS) folder config
 .DS_Store
 
-# Additional files
+# Additional
 bun.lock
+package-lock.json
+uploads/
+files/

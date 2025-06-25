@@ -80,14 +80,15 @@ export const logout = (req: Request, res: Response) => {
 };
 
 export const getEdit = (req: Request, res: Response) => {
-  return res.render("edit-profile", { pageTitle: "User Profile" });
+  return res.render("edit-profile", { pageTitle: "Edit Profile" });
 };
 export const postEdit = async (req: Request, res: Response) => {
   const {
     session: {
-      user: { _id },
+      user: { _id, avatarUrl },
     },
     body: { email, username, nickname, location },
+    file,
   } = req;
   const updatedUser = await User.findByIdAndUpdate(
     _id,
@@ -96,6 +97,7 @@ export const postEdit = async (req: Request, res: Response) => {
       username,
       nickname,
       location,
+      avatarUrl: file ? file.path : avatarUrl,
     },
     { new: true }
   );
@@ -107,7 +109,7 @@ export const getChange = (req: Request, res: Response) => {
   if (req.session.user.socialOnly === true) {
     return res.redirect("/");
   }
-  return res.render("change-pw", { pageTitle: "Password Change" });
+  return res.render("change-pw", { pageTitle: "Change Password" });
 };
 export const postChange = async (req: Request, res: Response) => {
   const {

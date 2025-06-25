@@ -10,5 +10,9 @@ declare module "express" {
       code?: string;
       [key: string]: any;
     };
+    file?: {
+      path: string;
+      [key: string]: any;
+    };
   }
 }
