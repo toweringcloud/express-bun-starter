@@ -11,14 +11,14 @@ export const postJoin = async (req: Request, res: Response) => {
   if (password !== password2) {
     return res.status(400).render("join", {
       pageTitle,
-      errorMessage: "Password confirmation does not match.",
+      errorMessage: "😖 Password confirmation does not match.",
     });
   }
   const exists = await User.exists({ $or: [{ username }, { email }] });
   if (exists) {
     return res.status(400).render("join", {
       pageTitle,
-      errorMessage: "This username/email is already taken.",
+      errorMessage: "😖 This username/email is already taken.",
     });
   }
   try {
@@ -140,4 +140,14 @@ export const postChange = async (req: Request, res: Response) => {
   }
 };
 
-export const see = (req: Request, res: Response) => res.send("See User");
+export const see = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const user = await User.findById(id).populate("movies");
+  if (!user) {
+    return res.status(404).render("404", { pageTitle: "User not found." });
+  }
+  return res.render("profile", {
+    pageTitle: user.username,
+    user,
+  });
+};

@@ -1,17 +1,28 @@
 extends templates/layout
 
 block content
-  h2=pageTitle
-  p.info Please fill the form to update a movie.
+  center
+    h2=pageTitle
+  p.info=`Please fill the form to update a movie (${movie.title}).`
   form(method="POST" enctype="multipart/form-data")
-    input(type="text" name="title" placeholder="Title" required maxlength=50 value=movie.title)
-    input(type="text" name="summary" placeholder="Summary" required minlength=20 value=movie.summary)
-    input(type="text" name="year" placeholder="Release Year" value=movie.year)
-    input(type="text" name="rating" placeholder="Rating" value=movie.rating)
-    input(type="text" name="genres" placeholder="Genres (by comma)" value=movie.genres.join(', '))
-    input(type="text" name="posterImage" placeholder="Poster Image Path" value=movie.posterImage)
+    label(for="title") Title
+    input(type="text" id="title" name="title" placeholder="Title" required maxlength=50 value=movie.title)
+    label(for="synopsis") Summary
+    input(type="text" id="synopsis" name="summary" placeholder="Summary" required minlength=20 value=movie.summary)
+    .flex-container
+      .item3
+        label(for="rating") Released Year
+        input(type="text" name="year" placeholder="Release Year" value=movie.year)
+      .item3
+        label(for="rating") Rating
+        input(type="text" id="rating" name="rating" placeholder="Rating" value=movie.rating)
+    label(for="genres") Genres
+    input(type="text" id="genres" name="genres" placeholder="Genres (by comma)" value=movie.genres.join(', '))
+    label(for="poster") Poster Image Path
+    input(type="text" id="poster" name="posterImage" placeholder="Poster Image Path" value=movie.posterImage)
     label(for="movie") Movie File
     input(type="file" id="movie" name="movie" accept="video/*" value=movie.fileUrl)
-    input(type="submit" value="SAVE")
+    center
+      input(type="submit" value="MODIFY")
   if errorMessage
     p.warning=errorMessage

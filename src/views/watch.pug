@@ -1,0 +1,40 @@
+extends templates/layout
+
+block content
+  center
+    h2=`${movie.title} (${movie.year || new Date().getFullYear()})`
+  if movie.posterImage
+    br
+    .flex-container
+      .item1
+        img(src=`${movie.posterImage}` width='90%' alt=`${movie.title} Poster`)
+        small=`uploaded by ${movie.owner.username}`
+        if loggedIn
+          if String(movie.owner._id) === String(loggedInUser._id)
+            p
+            .flex-container3
+              include ./partials/mutation
+      .item2
+        small=movie.summary
+        p
+        if movie.fileUrl
+          .flex-container2
+            span=movie.genres.join(", ")
+            span=`✨ ${movie.rating}`
+          video(src=`/${movie.fileUrl.replace("files", "uploads")}` width='100%' controls)
+          p
+        else
+          each genre in movie.genres
+            li #{genre}
+          p
+          big=`✨ ${movie.rating}`
+  else
+    p=movie.summary
+    each genre in movie.genres
+      li #{genre}
+    p
+    big=`✨ ${movie.rating}`
+    if loggedIn
+      if String(movie.owner._id) === String(loggedInUser._id)
+        hr
+        include ./partials/mutation

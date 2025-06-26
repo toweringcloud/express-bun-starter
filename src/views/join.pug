@@ -1,8 +1,9 @@
 extends templates/layout
 
 block content
-  h2=pageTitle
-  p.info Please fill the form to join as new member.
+  center
+    h2=pageTitle
+  br
   form(method="POST")
     input(type="email" name="email" placeholder="Email" required)
     input(type="text" name="username" placeholder="Username" required)

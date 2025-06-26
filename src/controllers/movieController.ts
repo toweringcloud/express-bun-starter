@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import Movie, { formatGenres, formatYear } from "../models/Movie.js";
+import User from "../models/User";
 
 // queries (read-list/search/watch)
 export const listMovie = async (req: Request, res: Response) => {
@@ -23,11 +24,11 @@ export const searchMovie = async (req: Request, res: Response) => {
 
 export const watchMovie = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const movie = await Movie.findById(id);
+  const movie = await Movie.findById(id).populate("owner");
   if (!movie) {
     return res.render("404", { pageTitle: "Movie not found." });
   }
-  return res.render("detail", { pageTitle: movie.title, movie });
+  return res.render("watch", { pageTitle: movie.title, movie });
 };
 
 // mutations (create, update, delete)
@@ -37,28 +38,31 @@ export const addMovie = (req: Request, res: Response) => {
 export const createMovie = async (req: Request, res: Response) => {
   const {
     body: { title, summary, year, genres, posterImage },
+    session: { user },
     file,
   } = req;
-  console.log(`# addMovie: ${JSON.stringify(file)}`);
-
   try {
-    if (!title || !summary) {
+    if (!title || !summary || !year || !genres) {
       throw new Error("Mandatory fields are required.");
     }
-    await Movie.create({
+    const newMovie = await Movie.create({
       title,
       summary,
       year: formatYear(year),
       genres: formatGenres(genres),
       posterImage,
       fileUrl: file ? file.path : undefined,
+      owner: user._id,
     });
+    const userInfo = await User.findById(user._id);
+    if (userInfo) {
+      userInfo.movies.push(newMovie._id);
+      userInfo.save();
+    }
     return res.redirect("/");
   } catch (error: unknown) {
     console.error("Error adding movie:", error);
     let errorMessage: string = "Unknown Error";
-
-    // 타입 가드를 사용하여 error의 타입을 좁힙니다.
     if (error instanceof Error) {
       errorMessage = error.message;
     } else if (
@@ -79,24 +83,30 @@ export const createMovie = async (req: Request, res: Response) => {
 
 export const editMovie = async (req: Request, res: Response) => {
   const { id } = req.params;
+  const { user } = req.session;
   const movie = await Movie.findById(id);
   if (!movie) {
     return res.render("404", { pageTitle: "Movie not found." });
+  }
+  if (String(movie.owner) !== String(user._id)) {
+    return res.status(403).redirect("/");
   }
   return res.render("edit", { pageTitle: `Edit: ${movie.title}`, movie });
 };
 export const updateMovie = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const movie = await Movie.exists({ _id: id });
+  const { user } = req.session;
+  const movie = await Movie.findById(id);
   if (!movie) {
     return res.render("404", { pageTitle: "Movie not found." });
+  }
+  if (String(movie.owner) !== String(user._id)) {
+    return res.status(403).redirect("/");
   }
   const {
     body: { title, summary, year, rating, genres, posterImage },
     file,
   } = req;
-  // console.log(`# updateMovie: ${file}`);
-
   await Movie.findByIdAndUpdate(id, {
     title,
     summary,
@@ -112,6 +122,14 @@ export const updateMovie = async (req: Request, res: Response) => {
 
 export const deleteMovie = async (req: Request, res: Response) => {
   const { id } = req.params;
+  const { user } = req.session;
+  const movie = await Movie.findById(id);
+  if (!movie) {
+    return res.status(404).render("404", { pageTitle: "Movie not found." });
+  }
+  if (String(movie.owner) !== String(user._id)) {
+    return res.status(403).redirect("/");
+  }
   await Movie.findByIdAndDelete(id);
   return res.redirect("/");
 };

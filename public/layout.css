@@ -1,17 +1,37 @@
 .flex-container {
   display: flex; /* Flexbox 컨테이너로 지정 */
-  gap: 0px; /* 아이템 사이의 간격 (선택 사항) */
+  gap: 5px;
 }
-
-.flex-container > .item1 {
+.item1 {
   flex: 1; /* 모든 아이템이 동일한 너비를 갖도록 설정 */
   text-align: center;
 }
-
-.flex-container > .item2 {
-  flex: 1; /* 모든 아이템이 동일한 너비를 갖도록 설정 */
-  /* border: 1px solid #ccc; */
-  padding-right: 10px;
-  padding-left: 20px;
+.item2 {
+  flex: 1;
+  padding-right: 20px;
+  padding-left: 10px;
   text-align: left;
+}
+.item3 {
+  flex: 1;
+  text-align: left;
+}
+.flex-container2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px;
+}
+.flex-container3 {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.info {
+  color: grey;
+  font-weight: 600;
+}
+.warning {
+  color: darkred;
 }
