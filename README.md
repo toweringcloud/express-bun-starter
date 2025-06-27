@@ -18,12 +18,17 @@ $ bun -v
 
 ### configure
 
-- run bun app with nodemon environment
+- install packages with bun
 
 ```sh
 $ bun init -y
-$ bun install
-$ vi .env
+$ bun i
+```
+
+- create runtime variables
+
+```sh
+$ cat .env
 API_PORT_NO=5000
 COOKIE_SECRET={YOUR_COOKIE_SECRET}
 DB_URL=mongodb://127.0.0.1:27017/movie
@@ -35,7 +40,7 @@ GH_CLIENT_SECRET={YOUR_GITHUB_CLIENT_SECRET}
 
 ### launch
 
-- run bun app with nodemon environment
+- run bun app with development mode
 
 ```sh
 $ bun dev

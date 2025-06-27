@@ -1,5 +1,7 @@
 {
   "name": "bun-express-starter",
+  "version": "1.0.0",
+  "description": "The best way to watch movies",
   "main": "src/index.ts",
   "scripts": {
     "dev": "bun --watch src/index.ts"
