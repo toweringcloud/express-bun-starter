@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import axios from "axios";
+
 import User from "../models/User";
 
 export const githubLogin = (req: Request, res: Response) => {

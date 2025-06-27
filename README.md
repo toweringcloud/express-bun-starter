@@ -29,7 +29,7 @@ $ bun i
 
 ```sh
 $ cat .env
-API_PORT_NO=5000
+API_PORT_NO=4000
 COOKIE_SECRET={YOUR_COOKIE_SECRET}
 DB_URL=mongodb://127.0.0.1:27017/movie
 GH_API_URL=https://api.github.com

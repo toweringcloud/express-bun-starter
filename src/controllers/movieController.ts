@@ -1,4 +1,5 @@
 import type { Request, Response } from "express";
+
 import Movie, { formatGenres, formatYear } from "../models/Movie.js";
 import User from "../models/User";
 
@@ -10,6 +11,7 @@ export const listMovie = async (req: Request, res: Response) => {
 
 export const searchMovie = async (req: Request, res: Response) => {
   const { keyword } = req.query;
+
   let movies: unknown = [];
   if (keyword) {
     movies = await Movie.find({
@@ -22,8 +24,9 @@ export const searchMovie = async (req: Request, res: Response) => {
   return res.render("search", { pageTitle: "Search Movie", keyword, movies });
 };
 
-export const watchMovie = async (req: Request, res: Response) => {
+export const readMovie = async (req: Request, res: Response) => {
   const { id } = req.params;
+
   const movie = await Movie.findById(id).populate("owner");
   if (!movie) {
     return res.render("404", { pageTitle: "Movie not found." });
@@ -32,7 +35,7 @@ export const watchMovie = async (req: Request, res: Response) => {
 };
 
 // mutations (create, update, delete)
-export const addMovie = (req: Request, res: Response) => {
+export const createMovieView = (req: Request, res: Response) => {
   return res.render("upload", { pageTitle: "Upload Movie" });
 };
 export const createMovie = async (req: Request, res: Response) => {
@@ -41,6 +44,7 @@ export const createMovie = async (req: Request, res: Response) => {
     session: { user },
     file,
   } = req;
+
   try {
     if (!title || !summary || !year || !genres) {
       throw new Error("Mandatory fields are required.");
@@ -54,6 +58,7 @@ export const createMovie = async (req: Request, res: Response) => {
       fileUrl: file ? file.path : undefined,
       owner: user._id,
     });
+
     const userInfo = await User.findById(user._id);
     if (userInfo) {
       userInfo.movies.push(newMovie._id);
@@ -63,6 +68,7 @@ export const createMovie = async (req: Request, res: Response) => {
   } catch (error: unknown) {
     console.error("Error adding movie:", error);
     let errorMessage: string = "Unknown Error";
+
     if (error instanceof Error) {
       errorMessage = error.message;
     } else if (
@@ -81,9 +87,10 @@ export const createMovie = async (req: Request, res: Response) => {
   }
 };
 
-export const editMovie = async (req: Request, res: Response) => {
+export const updateMovieView = async (req: Request, res: Response) => {
   const { id } = req.params;
   const { user } = req.session;
+
   const movie = await Movie.findById(id);
   if (!movie) {
     return res.render("404", { pageTitle: "Movie not found." });
@@ -96,6 +103,7 @@ export const editMovie = async (req: Request, res: Response) => {
 export const updateMovie = async (req: Request, res: Response) => {
   const { id } = req.params;
   const { user } = req.session;
+
   const movie = await Movie.findById(id);
   if (!movie) {
     return res.render("404", { pageTitle: "Movie not found." });
@@ -107,6 +115,7 @@ export const updateMovie = async (req: Request, res: Response) => {
     body: { title, summary, year, rating, genres, posterImage },
     file,
   } = req;
+
   await Movie.findByIdAndUpdate(id, {
     title,
     summary,
@@ -123,6 +132,7 @@ export const updateMovie = async (req: Request, res: Response) => {
 export const deleteMovie = async (req: Request, res: Response) => {
   const { id } = req.params;
   const { user } = req.session;
+
   const movie = await Movie.findById(id);
   if (!movie) {
     return res.status(404).render("404", { pageTitle: "Movie not found." });

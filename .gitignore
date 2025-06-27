@@ -35,6 +35,5 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 
 # Additional
 bun.lock
-package-lock.json
 uploads/
 files/
