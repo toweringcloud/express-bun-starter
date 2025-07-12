@@ -14,7 +14,7 @@ const userRouter = express.Router();
 
 userRouter.get("/github", publicOnly, githubLogin);
 userRouter.get("/github/callback", publicOnly, githubCallback);
-userRouter.get("/:id", readProfile);
+userRouter.get("/:id([0-9a-f]{24})", readProfile);
 userRouter
   .route("/edit")
   .all(protector)
