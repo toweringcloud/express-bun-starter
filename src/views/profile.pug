@@ -4,13 +4,20 @@ include mixins/movie
 block content
   center
     h2=pageTitle
-  p.info Please check your own movie(s).
+  br
+  if loggedInUser.avatarUrl
+    div(style="text-align: center;")
+      if String(loggedInUser.avatarUrl).startsWith("http")
+        img(src=`${loggedInUser.avatarUrl}` width='30%' alt=`${loggedInUser.username}'s Avatar`)
+      else
+        img(src=`/${loggedInUser.avatarUrl.replace("files", "upload")}` width='30%' alt=`${loggedInUser.username}'s Avatar`)
+      if String(loggedInUser._id) === String(user._id)
+        div
+          span 😊 Want to edit your profile? &nbsp;
+          a(href="/users/edit") Edit Profile &rarr;
+  br
+  p.info=`💫 Following movie(s) is(are) uploaded by ${pageTitle}.`
   each item in user.movies
     +movie(item)
   else
-    li Sorry, No Movies
-  if String(loggedInUser._id) === String(user._id)
-    hr
-    div
-      span 😊 Want to edit your profile? &nbsp;
-      a(href="/users/edit") Edit Profile &rarr;
+    li Sorry, No Movies!
